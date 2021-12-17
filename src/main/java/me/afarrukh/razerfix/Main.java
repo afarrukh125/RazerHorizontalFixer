@@ -1,3 +1,5 @@
+package me.afarrukh.razerfix;
+
 import com.github.rvesse.airline.Cli;
 import com.github.rvesse.airline.builder.CliBuilder;
 
@@ -9,6 +11,4 @@ public class Main {
                 .build();
         cli.parse(args).run();
     }
-
-
 }
