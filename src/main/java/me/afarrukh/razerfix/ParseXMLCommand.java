@@ -47,7 +47,7 @@ public class ParseXMLCommand implements Runnable {
         if (fileName != null)
             return new File(fileName);
         JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         int result = chooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = chooser.getSelectedFile();
