@@ -14,10 +14,14 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 public abstract class AbstractParseAndRewriteCommand implements Runnable {
     @Option(name = "--file")
     protected String fileName;
+
+    @Option(name = "--outputDir")
+    protected String outputDir;
 
     @Override
     public void run() {
@@ -54,14 +58,22 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
     void writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer;
+        fileName = fileName.replace(".xml", "_updated.xml");
+        Path path = generatePath(fileName);
         try {
             transformer = tf.newTransformer();
-            fileName = fileName.replace(".xml", "_updated.xml");
-            FileOutputStream outStream = new FileOutputStream(fileName);
+            FileOutputStream outStream = new FileOutputStream(path.toFile());
             transformer.transform(new DOMSource(xmlDocument), new StreamResult(outStream));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    Path generatePath(String fileName) {
+        if (outputDir != null)
+            return Path.of(outputDir, fileName);
+        else
+            return Path.of(fileName);
     }
 
     Document getDocument(File file) throws IOException, SAXException, ParserConfigurationException {
