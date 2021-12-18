@@ -1,10 +1,7 @@
 package me.afarrukh.razerfix;
 
-import com.github.rvesse.airline.annotations.Command;
 import com.github.rvesse.airline.annotations.Option;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
@@ -18,32 +15,26 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-@Command(name = "parse")
-public class ParseXMLCommand implements Runnable {
+public abstract class AbstractParseAndRewriteCommand implements Runnable {
     @Option(name = "--file")
-    private String fileName;
+    protected String fileName;
 
     @Override
     public void run() {
         File file = determineFile(fileName);
-
         try {
             Document document = getDocument(file);
-
-            NodeList xNodes = document.getElementsByTagName("X");
-            for (int i = 0; i < xNodes.getLength(); i++) {
-                Node targetNode = xNodes.item(i).getChildNodes().item(0);
-                int currentValue = Integer.parseInt(targetNode.getNodeValue());
-                targetNode.setNodeValue(String.valueOf(currentValue * 2));
-            }
-
+            execute(document);
             writeXmlDocumentToXmlFile(document, file.getName());
         } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
+
     }
 
-    private File determineFile(String fileName) {
+    public abstract void execute(Document document);
+
+    File determineFile(String fileName) {
         if (fileName != null)
             return new File(fileName);
         JFileChooser chooser = new JFileChooser();
@@ -60,7 +51,7 @@ public class ParseXMLCommand implements Runnable {
         throw new IllegalStateException("No file selected");
     }
 
-    private static void writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
+    void writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer;
         try {
@@ -73,7 +64,7 @@ public class ParseXMLCommand implements Runnable {
         }
     }
 
-    private Document getDocument(File file) throws IOException, SAXException, ParserConfigurationException {
+    Document getDocument(File file) throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 

@@ -1,2 +1,2 @@
 mvn package
-java -jar .\target\razerfix.jar parse
+java -jar .\target\razerfix.jar doublexdelay

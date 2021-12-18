@@ -7,7 +7,9 @@ public class Main {
 
     public static void main(String[] args) {
         Cli<Runnable> cli = new CliBuilder<Runnable>("parser")
-                .withCommand(ParseXMLCommand.class)
+                .withCommand(DoubleXCommand.class)
+                .withCommand(RemoveMouseMovementDelayCommand.class)
+                .withCommand(DoubleXAndDelayCommand.class)
                 .build();
         cli.parse(args).run();
     }
