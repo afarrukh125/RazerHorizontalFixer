@@ -5,6 +5,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,6 +16,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class AbstractParseAndRewriteCommand implements Runnable {
@@ -25,8 +28,8 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
 
     @Override
     public void run() {
-        File file = determineFile(fileName);
         try {
+            File file = determineFile(fileName);
             Document document = getDocument(file);
             execute(document);
             writeXmlDocumentToXmlFile(document, file.getName());
@@ -38,11 +41,25 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
 
     public abstract void execute(Document document);
 
-    File determineFile(String fileName) {
+    File determineFile(String fileName) throws IOException {
         if (fileName != null)
             return new File(fileName);
         JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        Path desiredPath;
+        String userDir = System.getProperty("user.dir");
+        if(outputDir == null)
+            desiredPath = Path.of(System.getProperty("user.dir"));
+        else {
+            Path outputDirPath = Path.of(userDir, outputDir);
+            if(!Files.exists(outputDirPath))
+                Files.createDirectory(outputDirPath);
+            desiredPath = outputDirPath;
+        }
+        File startLocation = desiredPath.toFile();
+        chooser.setCurrentDirectory(startLocation);
+        FileNameExtensionFilter fileNameExtensionFilter = new FileNameExtensionFilter("XML", "xml");
+        chooser.setFileFilter(fileNameExtensionFilter);
+        chooser.addChoosableFileFilter(fileNameExtensionFilter);
         int result = chooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = chooser.getSelectedFile();
@@ -58,7 +75,7 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
     void writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer;
-        fileName = fileName.replace(".xml", "_updated.xml");
+        fileName = fileName.replace(".xml", "_" +this.getClass().getSimpleName() + ".xml");
         Path path = generatePath(fileName);
         try {
             transformer = tf.newTransformer();
