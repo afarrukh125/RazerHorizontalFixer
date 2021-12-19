@@ -1,6 +1,8 @@
 package me.afarrukh.razerfix.command;
 
 import com.github.rvesse.airline.annotations.Option;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -26,17 +28,21 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
     @Option(name = "--outputDir")
     protected String outputDir;
 
+    private static final Logger logger = LoggerFactory.getLogger(AbstractParseAndRewriteCommand.class);
+
     @Override
     public void run() {
         try {
             File file = determineFile(fileName);
+            logger.info("Getting ready to write to file {}", file.getAbsolutePath());
             Document document = getDocument(file);
+            logger.info("Executing {}", this.getClass().getSimpleName());
             execute(document);
             writeXmlDocumentToXmlFile(document, file.getName());
         } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
-
+        logger.info("Execution complete");
     }
 
     public abstract void execute(Document document);
