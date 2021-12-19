@@ -1,4 +1,4 @@
-package me.afarrukh.razerfix;
+package me.afarrukh.razerfix.command;
 
 import com.github.rvesse.airline.annotations.Option;
 import org.w3c.dom.Document;
@@ -41,14 +41,14 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
 
     public abstract void execute(Document document);
 
-    File determineFile(String fileName) throws IOException {
+    final File determineFile(String fileName) throws IOException {
         if (fileName != null)
             return new File(fileName);
         JFileChooser chooser = new JFileChooser();
         Path desiredPath;
         String userDir = System.getProperty("user.dir");
         if(outputDir == null)
-            desiredPath = Path.of(System.getProperty("user.dir"));
+            desiredPath = Path.of(userDir);
         else {
             Path outputDirPath = Path.of(userDir, outputDir);
             if(!Files.exists(outputDirPath))
@@ -72,7 +72,7 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
         throw new IllegalStateException("No file selected");
     }
 
-    void writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
+    final void writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer;
         fileName = fileName.replace(".xml", "_" +this.getClass().getSimpleName() + ".xml");
@@ -93,7 +93,7 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
             return Path.of(fileName);
     }
 
-    Document getDocument(File file) throws IOException, SAXException, ParserConfigurationException {
+    final Document getDocument(File file) throws IOException, SAXException, ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 

@@ -1,4 +1,4 @@
-package me.afarrukh.razerfix;
+package me.afarrukh.razerfix.command;
 
 import com.github.rvesse.airline.annotations.Command;
 import org.w3c.dom.Document;

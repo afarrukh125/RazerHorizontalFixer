@@ -1,7 +1,6 @@
-package me.afarrukh.razerfix;
+package me.afarrukh.razerfix.command;
 
 import com.github.rvesse.airline.annotations.Command;
-import com.github.rvesse.airline.annotations.Option;
 import org.w3c.dom.Document;
 
 @Command(name = "doublexdelay")

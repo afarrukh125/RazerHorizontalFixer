@@ -2,6 +2,9 @@ package me.afarrukh.razerfix;
 
 import com.github.rvesse.airline.Cli;
 import com.github.rvesse.airline.builder.CliBuilder;
+import me.afarrukh.razerfix.command.DoubleXAndDelayCommand;
+import me.afarrukh.razerfix.command.DoubleXCommand;
+import me.afarrukh.razerfix.command.RemoveMouseMovementDelayCommand;
 
 public class Main {
 

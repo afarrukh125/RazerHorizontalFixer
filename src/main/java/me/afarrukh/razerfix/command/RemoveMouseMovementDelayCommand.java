@@ -1,4 +1,4 @@
-package me.afarrukh.razerfix;
+package me.afarrukh.razerfix.command;
 
 import com.github.rvesse.airline.annotations.Command;
 import com.github.rvesse.airline.annotations.Option;
@@ -13,7 +13,7 @@ public class RemoveMouseMovementDelayCommand extends AbstractParseAndRewriteComm
     protected String moveDelay = "0";
 
     @Option(name = "--otherdelays")
-    protected String otherDelays = "70";
+    protected String otherDelays = "30";
 
     @Override
     public void execute(Document document) {
@@ -22,7 +22,6 @@ public class RemoveMouseMovementDelayCommand extends AbstractParseAndRewriteComm
         for(int i = 0; i<delayNodes.getLength(); i++) {
             Node delayNode = delayNodes.item(i).getFirstChild();
             delayNode.setNodeValue(otherDelays);
-
         }
 
         NodeList mouseMovementEventNodes = document.getElementsByTagName("MouseMovementEvent");
