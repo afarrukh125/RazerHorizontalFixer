@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -40,7 +41,7 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
             Path resultingPath = writeXmlDocumentToXmlFile(document, file.getName());
             logger.info("Execution complete, file output to {}", resultingPath.toAbsolutePath());
         } catch (IOException | ParserConfigurationException | SAXException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -83,10 +84,10 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
             transformer = tf.newTransformer();
             FileOutputStream outStream = new FileOutputStream(path.toFile());
             transformer.transform(new DOMSource(xmlDocument), new StreamResult(outStream));
-        } catch (Exception e) {
-            e.printStackTrace();
+            return path;
+        } catch (FileNotFoundException | TransformerException e) {
+            throw new RuntimeException(e);
         }
-        return path;
     }
 
     Path generatePath(String fileName) {
