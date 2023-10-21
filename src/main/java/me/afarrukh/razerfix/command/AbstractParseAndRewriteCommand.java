@@ -7,7 +7,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,27 +37,24 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
             Document document = getDocument(file);
             logger.info("Executing {}", this.getClass().getSimpleName());
             execute(document);
-            writeXmlDocumentToXmlFile(document, file.getName());
+            Path resultingPath = writeXmlDocumentToXmlFile(document, file.getName());
+            logger.info("Execution complete, file output to {}", resultingPath.toAbsolutePath());
         } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
-        logger.info("Execution complete");
     }
 
     public abstract void execute(Document document);
 
     final File determineFile(String fileName) throws IOException {
-        if (fileName != null)
-            return new File(fileName);
+        if (fileName != null) return new File(fileName);
         JFileChooser chooser = new JFileChooser();
         Path desiredPath;
         String userDir = System.getProperty("user.dir");
-        if(outputDir == null)
-            desiredPath = Path.of(userDir);
+        if (outputDir == null) desiredPath = Path.of(userDir);
         else {
             Path outputDirPath = Path.of(userDir, outputDir);
-            if(!Files.exists(outputDirPath))
-                Files.createDirectory(outputDirPath);
+            if (!Files.exists(outputDirPath)) Files.createDirectory(outputDirPath);
             desiredPath = outputDirPath;
         }
         File startLocation = desiredPath.toFile();
@@ -78,10 +74,10 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
         throw new IllegalStateException("No file selected");
     }
 
-    final void writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
+    final Path writeXmlDocumentToXmlFile(Document xmlDocument, String fileName) {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer;
-        fileName = fileName.replace(".xml", "_" +this.getClass().getSimpleName() + ".xml");
+        fileName = fileName.replace(".xml", "_" + this.getClass().getSimpleName() + ".xml");
         Path path = generatePath(fileName);
         try {
             transformer = tf.newTransformer();
@@ -90,13 +86,12 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return path;
     }
 
     Path generatePath(String fileName) {
-        if (outputDir != null)
-            return Path.of(outputDir, fileName);
-        else
-            return Path.of(fileName);
+        if (outputDir != null) return Path.of(outputDir, fileName);
+        else return Path.of(fileName);
     }
 
     final Document getDocument(File file) throws IOException, SAXException, ParserConfigurationException {
@@ -108,10 +103,11 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         while ((line = br.readLine()) != null) {
-            xmlStringBuilder.append(line);
+            xmlStringBuilder.append(line).append("\n");
         }
 
-        ByteArrayInputStream input = new ByteArrayInputStream(xmlStringBuilder.toString().getBytes(StandardCharsets.UTF_8));
+        ByteArrayInputStream input =
+                new ByteArrayInputStream(xmlStringBuilder.toString().getBytes(StandardCharsets.UTF_8));
         return builder.parse(input);
     }
 }
