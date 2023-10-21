@@ -1,7 +1,7 @@
-package me.afarrukh.razerfix.command;
+package me.afarrukh.razertools.command;
 
 import com.github.rvesse.airline.annotations.Command;
-import me.afarrukh.razerfix.utils.Utils;
+import me.afarrukh.razertools.utils.Utils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

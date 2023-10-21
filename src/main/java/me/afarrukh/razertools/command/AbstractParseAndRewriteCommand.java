@@ -1,4 +1,4 @@
-package me.afarrukh.razerfix.command;
+package me.afarrukh.razertools.command;
 
 import com.github.rvesse.airline.annotations.Option;
 import org.slf4j.Logger;

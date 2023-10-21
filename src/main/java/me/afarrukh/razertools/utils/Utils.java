@@ -1,4 +1,4 @@
-package me.afarrukh.razerfix.utils;
+package me.afarrukh.razertools.utils;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

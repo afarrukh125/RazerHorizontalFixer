@@ -1,11 +1,11 @@
-package me.afarrukh.razerfix;
+package me.afarrukh.razertools;
 
 import com.github.rvesse.airline.Cli;
 import com.github.rvesse.airline.builder.CliBuilder;
-import me.afarrukh.razerfix.command.CollapseMouseMovementCommand;
-import me.afarrukh.razerfix.command.FullCleanupCommand;
-import me.afarrukh.razerfix.command.DoubleXCommand;
-import me.afarrukh.razerfix.command.RemoveMouseMovementDelayCommand;
+import me.afarrukh.razertools.command.CollapseMouseMovementCommand;
+import me.afarrukh.razertools.command.FullCleanupCommand;
+import me.afarrukh.razertools.command.DoubleXCommand;
+import me.afarrukh.razertools.command.RemoveMouseMovementDelayCommand;
 
 public class Main {
 
