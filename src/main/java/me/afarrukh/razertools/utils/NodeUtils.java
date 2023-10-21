@@ -6,7 +6,7 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utils {
+public class NodeUtils {
     public static List<Node> getChildNodes(Node parent) {
         List<Node> children = new ArrayList<>();
         NodeList childNodes = parent.getChildNodes();
