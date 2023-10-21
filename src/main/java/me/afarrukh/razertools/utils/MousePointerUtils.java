@@ -13,6 +13,9 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 public class MousePointerUtils {
     private static final Logger LOG = LoggerFactory.getLogger(MousePointerUtils.class);
 
+    public static final double xFactor = 1.71;
+    public static final double yFactor = 60.75;
+
     public static void main(String[] args) {
         String values =
                 """
