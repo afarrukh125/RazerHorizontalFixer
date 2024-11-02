@@ -8,13 +8,14 @@ import org.w3c.dom.NodeList;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
 public class NodeUtils {
-    public static List<Node> getChildNodes(Node parent) {
-        List<Node> children = new ArrayList<>();
+    public static LinkedList<Node> getChildNodes(Node parent) {
+        LinkedList<Node> children = new LinkedList<>();
         NodeList childNodes = parent.getChildNodes();
         int length = childNodes.getLength();
         for (int i = 0; i < length; i++) {
@@ -23,8 +24,8 @@ public class NodeUtils {
         return children;
     }
 
-    public static List<Node> nodeListToList(NodeList nodeList) {
-        List<Node> items = new ArrayList<>();
+    public static LinkedList<Node> nodeListToList(NodeList nodeList) {
+        LinkedList<Node> items = new LinkedList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             items.add(nodeList.item(i));
         }

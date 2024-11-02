@@ -13,7 +13,7 @@ public class RemoveMouseMovementDelayCommand extends AbstractParseAndRewriteComm
     protected String moveDelay = "0";
 
     @Option(name = "--otherdelays")
-    protected String otherDelays = "30";
+    protected String otherDelays = "8";
 
     @Override
     public void execute(Document document) {

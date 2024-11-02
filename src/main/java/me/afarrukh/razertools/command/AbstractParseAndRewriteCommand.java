@@ -40,14 +40,16 @@ public abstract class AbstractParseAndRewriteCommand implements Runnable {
             execute(document);
             Path resultingPath = writeXmlDocumentToXmlFile(document, file.getName());
             logger.info("Execution complete, file output to {}", resultingPath.toAbsolutePath());
-        } catch (IOException | ParserConfigurationException | SAXException e) {
+        } catch (IOException | ParserConfigurationException | SAXException | UnsupportedLookAndFeelException |
+                 ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
     public abstract void execute(Document document);
 
-    final File determineFile(String fileName) throws IOException {
+    final File determineFile(String fileName) throws IOException, UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         if (fileName != null) return new File(fileName);
         JFileChooser chooser = new JFileChooser();
         Path desiredPath;
