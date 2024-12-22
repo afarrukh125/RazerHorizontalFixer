@@ -8,12 +8,7 @@ import org.w3c.dom.Document;
 public class CollapseMouseMovementCommand extends AbstractParseAndRewriteCommand {
     @Override
     public void execute(Document document) {
-        var mouseMovementNodes = document.getElementsByTagName("MouseMovement");
-        for (var node : NodeUtils.nodeListToList(mouseMovementNodes)) {
-            var mouseMovementEventNodes = NodeUtils.getChildNodes(node);
-            mouseMovementEventNodes.stream()
-                    .limit(mouseMovementEventNodes.size() - 2)
-                    .forEach(childNode -> childNode.getParentNode().removeChild(childNode));
-        }
+        NodeUtils.collapseMouseMovement(document);
     }
+
 }

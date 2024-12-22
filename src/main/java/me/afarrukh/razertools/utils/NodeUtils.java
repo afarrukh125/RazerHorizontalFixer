@@ -42,4 +42,13 @@ public class NodeUtils {
     }
 
 
+    public static void collapseMouseMovement(Document document) {
+        var mouseMovementNodes = document.getElementsByTagName("MouseMovement");
+        for (var node : nodeListToList(mouseMovementNodes)) {
+            var mouseMovementEventNodes = getChildNodes(node);
+            mouseMovementEventNodes.stream()
+                    .limit(mouseMovementEventNodes.size() - 2)
+                    .forEach(childNode -> childNode.getParentNode().removeChild(childNode));
+        }
+    }
 }

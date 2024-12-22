@@ -8,6 +8,7 @@ import org.w3c.dom.Document;
 public class DoubleXCommand extends AbstractParseAndRewriteCommand {
     @Override
     public void execute(Document document) {
+        NodeUtils.collapseMouseMovement(document);
         NodeUtils.multiplyFirstElementOfChildWithTagByFactor(document, "X", 2);
     }
 
